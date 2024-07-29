@@ -1,7 +1,7 @@
-# Compresion
+# IDE
 
 # Goals
-Project aiming to comprese come obj,image and sounds files without losing quality and doing it so easily it will take only 2-3 clickes
+IDE for my c-style language(just doing for fun and practice)
 
 # Tools
 1) C,C++
