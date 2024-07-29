@@ -3,15 +3,18 @@
 #include <shobjidl.h> 
 #include<GL/glew.h>
 #include <GLFW/glfw3.h>
-#include<string>
+#include<iostream>
 #include"..\libraries\imgui\imconfig.h"
 #include"..\libraries\imgui\imgui_impl_glfw.h"
 #include"..\libraries\imgui\imgui_impl_opengl3.h"
 #define GL_SILENCE_DEPRECATION
 
+#include"keyboard.h"
+
 
 std::string sSelectedFile;
 std::string sFilePath;
+std::string name = "";
 bool openFile()
 {
     //  CREATE FILE OBJECT INSTANCE
@@ -72,7 +75,10 @@ bool openFile()
 }
 
 
-
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    name += key;
+}
 
 int main(void)
 {
@@ -101,25 +107,23 @@ int main(void)
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
-    // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Compresion Testing App", nullptr, nullptr);
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "IDE for my custom language", nullptr, nullptr);
     if (window == nullptr)
         return 1;
 
     glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, keyCallback);
 
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      
 
-    // Setup Dear ImGui style
+ 
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
 
-    // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 #ifdef __EMSCRIPTEN__
     ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
@@ -136,11 +140,11 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Components", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_None);
+        ImGui::Begin("Components", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
         ImGui::SetWindowPos(ImVec2(0, 0));
+        ImGui::InputText(" ", (char*)name.c_str(), name.size());
 
-        if (ImGui::Button("Load file"))
-            openFile();
+        
 
         ImGui::End();
         ImGui::Render();
